@@ -12,3 +12,22 @@
     width: 100%;
 }
 
+.shopping-cart-items {
+    padding: 20px 0px;
+  }
+  
+.shopping-cart-header {
+border-bottom: 1px solid #ccc;
+}
+
+.shopping-cart-image {
+max-width: 80px;
+border-radius: 20px;
+}
+
+.shopping-cart-quantity-input {
+max-width: 50px;
+border: 1px solid #ccc;
+border-radius: 5px;
+padding: 5px;
+}
