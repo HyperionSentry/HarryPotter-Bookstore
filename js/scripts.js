@@ -180,15 +180,14 @@ function amountChanged(e){
 }
 
 function buyButtonClick (){
-    shoppingCartItemsContainer.innerHTML = '';
-    updateCartTotal();
+    
     const URLGET   = "https://jsonplaceholder.typicode.com/posts";
     const infoPost =  { nombre: "Comprar" };
 
     $.post(URLGET, infoPost ,(respuesta, estado) => {
         if(estado === "success"){
-            $('body').append(`<h4 class="buyStyle">Gracias por su Compra!</h4>`);
-            window.scrollTo(0,document.body.scrollHeight);
+            shoppingCartItemsContainer.innerHTML = '';
+            updateCartTotal();;
         }  
 
     });
