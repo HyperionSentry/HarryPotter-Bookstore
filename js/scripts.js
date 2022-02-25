@@ -33,28 +33,54 @@ function buildItems(){
  
   }
   buildItems();
+
+
 function AddBooks () {
-    for (let i=1; i<=localStorage.length ;i++){
-        let item = JSON.parse(localStorage.getItem(`item${i}`));
-        let bookTitle = item.nameItem;
-        let bookImg = item.itemImg;
-        let bookPrice = item.itemPrice;
+    const itemsContainer = document.querySelector('.items');
+
+    for (let i=1; i<=localStorage.length ;i=i+2){
+        let item1 = JSON.parse(localStorage.getItem(`item${i}`));
+        let bookTitle1 = item1.nameItem;
+        let bookImg1 = item1.itemImg;
+        let bookPrice1 = item1.itemPrice;
+        let item2 = JSON.parse(localStorage.getItem(`item${i+1}`));
+        let bookTitle2 = item2.nameItem;
+        let bookImg2 = item2.itemImg;
+        let bookPrice2 = item2.itemPrice;
 
 
-        let item = `<div class="col-12 col-md-6">
-                        <div class="item shadow mb-4">
-                            <h3 class="item-title">${bookTitle}</h3>
-                            <img class="item-image" src="${bookImg}">
-
-                            <div class="item-details">
-                                <h4 class="item-price">${bookPrice}</h4>
-                                <button class="item-button btn btn-primary addToCart">AÑADIR</button>
+        let item = `<div class="row"> 
+                        <div class="col-12 col-md-6">
+                            <div class="item shadow mb-4">
+                               <h3 class="item-title">${bookTitle1}</h3>
+                               <img class="item-image" src="${bookImg1}">
+                               <div class="item-details">
+                                   <h4 class="item-price">${bookPrice1}</h4>
+                                   <button class="item-button btn btn-primary addToCart">AÑADIR</button>
+                                </div>
                             </div>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <div class="item shadow mb-4">
+                                <h3 class="item-title">${bookTitle2}</h3>
+                                <img class="item-image" src="${bookImg2}">
+                                <div class="item-details">
+                                     <h4 class="item-price">${bookPrice2}</h4>
+                                    <button class="item-button btn btn-primary addToCart">AÑADIR</button>
+                                </div>
+                            </div>
+                        </div>
                     </div>`
+        const cards = document.createElement('div');
+        cards.innerHTML = item;
+        itemsContainer.append(cards);
+
     }
 
 }
 AddBooks ();
+
+
 const addToShoppingCartButtons = document.querySelectorAll(".addToCart");
 
 addToShoppingCartButtons.forEach(addToCartButton => {
@@ -72,8 +98,8 @@ addToShoppingCartButtons.forEach(addToCartButton => {
            
 });
 
-const comprarButton = document.querySelector('.comprarButton');
-comprarButton.addEventListener('click', comprarButtonClicked);
+const buyButton = document.querySelector('.buyButton');
+buyButton.addEventListener('click', buyButtonClick);
 
 const shoppingCartItemsContainer = document.querySelector('.shoppingCartItemsContainer');
 
@@ -84,7 +110,7 @@ function addItemToShoppingCart(itemTitle, itemPrice, itemImage){
         if(elementsTitle[i].innerText === itemTitle){
             let elementQuantity = elementsTitle[i].parentElement.parentElement.parentElement.querySelector('.shoppingCartItemQuantity');
             elementQuantity.value++;
-            updateShoppingCartTotal();
+            updateCartTotal();
             return;
         }
     }
@@ -117,13 +143,13 @@ function addItemToShoppingCart(itemTitle, itemPrice, itemImage){
     shoppingCartItemsContainer.append(shoppingCartRow);
 
     shoppingCartRow.querySelector('.buttonDelete').addEventListener('click', removeShoppingCartItem);
-    shoppingCartRow.querySelector('.shoppingCartItemQuantity').addEventListener('change',quantityChanged);
+    shoppingCartRow.querySelector('.shoppingCartItemQuantity').addEventListener('change',amountChanged);
 
-    updateShoppingCartTotal();
+    updateCartTotal();
     
 }
 
-function updateShoppingCartTotal(){
+function updateCartTotal(){
     let total = 0;
     const shoppingCartTotal = document.querySelector('.shoppingCartTotal');
     const shoppingCartItems = document.querySelectorAll ('.shoppingCartItem');
@@ -144,35 +170,30 @@ function updateShoppingCartTotal(){
 function removeShoppingCartItem(e){
     const buttonClicked = e.target;
     buttonClicked.closest('.shoppingCartItem').remove();
-    updateShoppingCartTotal();
+    updateCartTotal();
 }
 
-function quantityChanged(e){
+function amountChanged(e){
     const input = e.target;
     input.value <= 0 ? (input.value = 1) : null;
-    updateShoppingCartTotal();
+    updateCartTotal();
 }
 
-function comprarButtonClicked (){
+function buyButtonClick (){
     shoppingCartItemsContainer.innerHTML = '';
-    updateShoppingCartTotal();
+    updateCartTotal();
+    const URLGET   = "https://jsonplaceholder.typicode.com/posts";
+    const infoPost =  { nombre: "Comprar" };
+
+    $.post(URLGET, infoPost ,(respuesta, estado) => {
+        if(estado === "success"){
+            $('body').append(`<h4 class="buyStyle">Gracias por su Compra!</h4>`);
+            window.scrollTo(0,document.body.scrollHeight);
+        }  
+
+    });
 }
 
 
-for (let i=0; i<=localStorage.length ;i++){  
-    let item = JSON.parse(localStorage.getItem(`item${i}`));
-    console.log(item.nameItem);
-}
-for (let i=0; i<=localStorage.length ;i++){  
-    console.log(JSON.parse(localStorage.getItem(`item${i}`)).nameItem)
-}
 
 
-
-for (let i=1; i<=localStorage.length ;i = i+2){  
-    let item1 = JSON.parse(localStorage.getItem(`item${i}`));
-    console.log(item1.itemPrice);
-    let item2 = 
-JSON.parse(localStorage.getItem(`item${i+1}`));
-    console.log(item2.itemPrice);
-}
